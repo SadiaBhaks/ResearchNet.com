@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast"; // ✅ Added
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -14,7 +15,8 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    try {
+    // ✅ Using toast.promise for integrated feedback
+    const loginAction = async () => {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -23,23 +25,46 @@ export default function LoginPage() {
 
       const data = await res.json();
 
-      if (res.ok) {
-        // Save user to local storage for the ResearchCard to use
-        localStorage.setItem("nexusUser", JSON.stringify(data.user));
-        router.push("/");
-        router.refresh();
-      } else {
-        setError(data.error);
+      if (!res.ok) {
+        throw new Error(data.error || "Login failed");
       }
-    } catch (err) {
-      setError("Login failed. Check your connection.");
-    } finally {
+
+      // Save user to local storage
+      localStorage.setItem("nexusUser", JSON.stringify(data.user));
+      
+      router.push("/");
+      router.refresh();
+      return data;
+    };
+
+    toast.promise(loginAction(), {
+      loading: 'Authenticating...',
+      success: 'Welcome back! 🔓',
+      error: (err) => `${err.message}`,
+    }, {
+      style: {
+        borderRadius: '16px',
+        background: '#fff',
+        color: '#18181b',
+        border: '1px solid #f4f4f5',
+        fontWeight: 'bold',
+      },
+      success: {
+        iconTheme: {
+          primary: '#2563eb', // Blue-600 to match your button
+          secondary: '#fff',
+        },
+      },
+    }).finally(() => {
       setLoading(false);
-    }
+    });
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+      {/* --- Added Toaster wrapper --- */}
+      <Toaster position="top-center" /> 
+
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
         <h1 className="text-3xl font-black text-gray-900 mb-2">Welcome Back</h1>
         <p className="text-gray-500 mb-8">Log in to access your research library.</p>

@@ -9,7 +9,8 @@ import {
   TrendingUp, 
   GitCompare, 
   Bookmark,
-  Search
+  Search,
+  Sparkles
 } from "lucide-react";
 
 import { primaryGradient, secondaryColor, textColor, cardBg } from "@/theme/theme";
@@ -74,6 +75,9 @@ export default function Research() {
           
           <Link href="/library" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
             <Bookmark size={18}/> Saved Topics
+          </Link>
+           <Link href="/summarize" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
+            <Sparkles size={18}/> Summarize
           </Link>
         </nav>
       </aside>

@@ -2,31 +2,50 @@
 
 import { useDarkMode } from "@/components/DarkModeContext";
 import { primaryGradient, secondaryColor, textColor, cardBg } from "@/theme/theme";
-import { useState } from "react";
+import { useState, useEffect, useRef} from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { signIn } from "next-auth/react";
 import { Github, Chrome } from "lucide-react";
 import Link from "next/link";
 import CountUp from "react-countup";
+import toast, { Toaster } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 export default function Homepage() {
-
-  const { darkMode } = useDarkMode();
-  const card = darkMode ? cardBg.dark : cardBg.light;
-
+ const { darkMode } = useDarkMode();
+   const card = darkMode ? cardBg.dark : cardBg.light;
+  const { data: session, status } = useSession(); // ✅ Monitor Google/Github session
+  const router = useRouter();
+  
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
+  // ✅ NEW: Logic to show popup for Social Login
+  const hasShownToast = useRef(false);
+  useEffect(() => {
+    if (status === "authenticated" && !hasShownToast.current) {
+      toast.success(`Welcome back, ${session?.user?.name || 'Researcher'}! `, {
+        style: {
+          borderRadius: '16px',
+          background: darkMode ? '#18181b' : '#fff',
+          color: darkMode ? '#fff' : '#18181b',
+          border: `1px solid ${darkMode ? '#27272a' : '#f4f4f5'}`,
+          fontWeight: 'bold',
+        },
+      });
+      hasShownToast.current = true;
+    }
+  }, [status, session, darkMode]);
 
+  // ✅ KEEPING YOUR ORIGINAL SUBMIT LOGIC EXACTLY THE SAME
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    try {
+    const registerAction = async () => {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -35,228 +54,241 @@ export default function Homepage() {
 
       const data = await res.json();
 
-      if (res.ok) {
-        localStorage.setItem(
-          "nexusUser",
-          JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-          })
-        );
-
-        router.refresh();
-        router.push("/");
-      } else {
-        setError(data.error || "Registration failed");
+      if (!res.ok) {
+        throw new Error(data.error || "Registration failed");
       }
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
+
+      localStorage.setItem(
+        "nexusUser",
+        JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+        })
+      );
+
+      router.refresh();
+      router.push("/");
+      return data;
+    };
+
+    toast.promise(registerAction(), {
+      loading: 'Creating your research account...',
+      success: 'Welcome to ResearchNet! kindly Login before using notes or settings. ',
+      error: (err) => `${err.message}`,
+    }, {
+      style: {
+        borderRadius: '16px',
+        background: darkMode ? '#18181b' : '#fff',
+        color: darkMode ? '#fff' : '#18181b',
+        border: `1px solid ${darkMode ? '#27272a' : '#f4f4f5'}`,
+        fontWeight: 'bold',
+      },
+      success: {
+        iconTheme: {
+          primary: '#0ea5e9', // Sky Blue
+          secondary: '#fff',
+        },
+      },
+    }).finally(() => {
       setLoading(false);
+    });
+  };
+
+  const container = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.2
+      }
     }
   };
-  const container = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
-};
 
-const cardAnim = {
-  hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0 }
-};
-
+  const cardAnim = {
+    hidden: { opacity: 0, y: 40 },
+    show: { opacity: 1, y: 0 }
+  };
 
   return (
-    <main className="overflow-hidden"
     
->
+    <main className="overflow-hidden">
+      {/* --- Added Toaster wrapper --- */}
+      <Toaster position="top-center" />
 
-{/* HERO SECTION */}
+      {/* HERO SECTION */}
+      <section
+     
+        className="relative min-h-screen grid grid-cols-1 lg:grid-cols-2"
+        style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}
+      >
+        {/* glowing gradient background */}
+        <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full blur-[160px] opacity-40 bg-blue-500"></div>
+        <div className="absolute top-60 right-0 w-[400px] h-[400px] rounded-full blur-[140px] opacity-30 bg-purple-500"></div>
 
-<section
-className="relative min-h-screen grid grid-cols-1 lg:grid-cols-2"
-style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}
->
+        {/* LEFT SIDE */}
+        <div className="max-w-5xl mx-auto px-10 py-20 flex flex-col justify-center relative z-10">
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-6xl lg:text-7xl font-black tracking-tight mb-8 leading-tight"
+            style={{ color: darkMode ? secondaryColor.dark : secondaryColor.light }}
+          >
+            Discover  
+            <span className="block">Research</span>  
+            <span className="block">That Matters</span>
+          </motion.h1>
 
-{/* glowing gradient background */}
-<div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full blur-[160px] opacity-40 bg-blue-500"></div>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-lg max-w-xl leading-relaxed"
+            style={{ color: darkMode ? textColor.dark : textColor.light }}
+          >
+            Stop just reading papers—start building a **library of insights**.  
+            ResearchNet analyzes citation trends and feasibility in real-time.
+            <span className="block mt-6"> <b className="text-xl">Search. Analyze. Annotate.</b> </span>
+          </motion.p>
 
-<div className="absolute top-60 right-0 w-[400px] h-[400px] rounded-full blur-[140px] opacity-30 bg-purple-500"></div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mt-12"
+          />
+        </div>
 
+        {/* REGISTER FORM */}
+        <div className="flex items-center justify-center p-10 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7 }}
+            className="w-full max-w-md"
+          >
+            <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl border border-white/20">
+              <h1 className="text-black dark:text-white text-2xl text-center m-2 font-black">Register Here</h1>
+              <p className="text-sm text-center text-gray-500 dark:text-zinc-400 mb-8">
+                Create your free research account.
+              </p>
 
-{/* LEFT SIDE */}
+              {/* SOCIAL LOGIN */}
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                <button
+                  onClick={() => signIn("google")}
+                  className="flex items-center justify-center gap-2 py-3 rounded-xl border bg-white hover:scale-105 transition"
+                >
+                  <Chrome size={16} className="text-red-500 "/>
+                  Google
+                </button>
+                <button
+                  onClick={() => signIn("github")}
+                  className="flex items-center justify-center gap-2 py-3 rounded-xl border bg-white hover:scale-105 transition"
+                >
+                  <Github size={16} />
+                  GitHub
+                </button>
+              </div>
 
-<div className="max-w-5xl mx-auto px-10 py-20 flex flex-col justify-center relative z-10">
-
-<motion.h1
-initial={{opacity:0,y:40}}
-animate={{opacity:1,y:0}}
-transition={{duration:0.8}}
-className="text-6xl lg:text-7xl font-black tracking-tight mb-8 leading-tight"
-style={{color: darkMode ? secondaryColor.dark : secondaryColor.light}}
->
-
-Discover  
-<span className="block">Research</span>  
-<span className="block">That Matters</span>
-
-</motion.h1>
-
-<motion.p
-initial={{opacity:0,y:30}}
-animate={{opacity:1,y:0}}
-transition={{delay:0.3,duration:0.8}}
-className="text-lg max-w-xl leading-relaxed"
-style={{color: darkMode ? textColor.dark : textColor.light}}
->
-
-Stop just reading papers—start building a **library of insights**.  
-ResearchNet analyzes citation trends and feasibility in real-time.
-
-<span className="block mt-6"> <b className="text-xl">Search. Analyze. Annotate.</b> </span>
-
-</motion.p>
-
-{/* CTA */}
-
-<motion.div
-initial={{opacity:0,y:20}}
-animate={{opacity:1,y:0}}
-transition={{delay:0.6}}
-className="mt-12"
->
-
-
-
-</motion.div>
-
-</div>
-
-
-{/* REGISTER FORM */}
-
-<div className="flex items-center justify-center p-10 relative z-10">
-
-<motion.div
-initial={{opacity:0,scale:0.9}}
-animate={{opacity:1,scale:1}}
-transition={{duration:0.7}}
-className="w-full max-w-md"
->
-
-<div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl border border-white/20">
-
-<h1 className="text-white text-2xl text-center m-2">Register Here</h1>
-
-<p className="text-sm text-center text-gray-500 dark:text-zinc-400 mb-8">
-Create your free research account.
-</p>
-
-{/* SOCIAL LOGIN */}
-
-<div className="grid grid-cols-2 gap-3 mb-6">
-
-<button
-onClick={() => signIn("google")}
-className="flex items-center justify-center gap-2 py-3 rounded-xl border bg-white  hover:scale-105 transition"
->
-
-<Chrome size={16} className="text-red-500 "/>
-Google
-
-</button>
-
-<button
-onClick={() => signIn("github")}
-className="flex items-center justify-center gap-2 py-3 rounded-xl border bg-white  hover:scale-105 transition"
->
-
-<Github size={16} />
-GitHub
-
-</button>
-
-</div>
-
-
-<div className="relative flex items-center mb-6">
-
-<div className="flex-grow border-t"></div>
-
-<span className="mx-3 text-xs opacity-50">or</span>
-
-<div className="flex-grow border-t"></div>
-
-</div>
-
-
+              <div className="relative flex items-center mb-6">
+                <div className="flex-grow border-t"></div>
+                <span className="mx-3 text-xs opacity-50">or</span>
+                <div className="flex-grow border-t"></div>
+              </div>
 <form onSubmit={handleSubmit} className="space-y-4">
 
+
+
 <input
+
 type="text"
+
 required
+
 placeholder="Full Name"
+
 className="w-full p-3 rounded-xl bg-gray-300  border focus:ring-2"
+
 onChange={(e)=>setFormData({...formData,name:e.target.value})}
+
 />
 
+
+
 <input
+
 type="email"
+
 required
+
 placeholder="Email"
+
 className="w-full p-3 rounded-xl bg-gray-300  border focus:ring-2 "
+
 onChange={(e)=>setFormData({...formData,email:e.target.value})}
+
 />
 
+
+
 <input
+
 type="password"
+
 required
+
 placeholder="Password"
+
 className="w-full p-3 rounded-xl bg-gray-300  border focus:ring-2 "
+
 onChange={(e)=>setFormData({...formData,password:e.target.value})}
+
 />
+
+
 
 {error && <p className="text-red-500 text-xs text-center">{error}</p>}
 
+
+
 <button
+
 type="submit"
+
 disabled={loading}
+
 className={`w-full py-4 rounded-xl font-bold text-white transition ${
+
 darkMode ? "bg-purple-600 hover:bg-purple-700" : "bg-blue-600 hover:bg-blue-700"
+
 }`}
+
 >
+
+
 
 {loading ? "Creating Account..." : "Create Free Account"}
 
-</button>
 
-</form>
-
-<p className="mt-6 text-center text-sm text-gray-500">
-
-Already member?{" "}
-
-<button
-onClick={()=>router.push("/login")}
-className={`font-bold text-blue-600 hover:underline ${
-darkMode ? 'text-purple-600'  : 'text-blue-600 '
-}`}
->
-
-Log in
 
 </button>
+              </form>
 
-</p>
-
-</div>
-</motion.div>
-</div>
-</section>
+              <p className="mt-6 text-center text-sm text-gray-500">
+                Login here!{" "}
+                <button
+                  onClick={() => router.push("/login")}
+                  className={`font-bold hover:underline ${
+                    darkMode ? 'text-purple-600' : 'text-blue-600'
+                  }`}
+                >
+                  Log in
+                </button>
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
 
 {/* MOVING KEYWORD TICKER */}

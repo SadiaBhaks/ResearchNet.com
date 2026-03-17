@@ -21,6 +21,7 @@ const TopicSchema = new mongoose.Schema({
     default: false 
   },
   tags: [String],
+  aiSummary: { type: String },
 
   // Nexus Logic (Calculated in your card)
   trendLevel: { 
