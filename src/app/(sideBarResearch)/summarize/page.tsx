@@ -27,7 +27,7 @@ export default function SummarizerPage() {
     return null;
   };
 
-  // ✅ Updated: Calls the AI route to generate the summary
+  
   const handleSummarize = async () => {
     if (!text) return toast.error("Please paste some text first!");
     
@@ -54,21 +54,21 @@ export default function SummarizerPage() {
     }
   };
 
-  // ✅ Updated: Matches your topic.ts model exactly
+  
   const handleSaveToLibrary = async () => {
     const userEmail = getActiveEmail();
     if (!summary || !userEmail) return toast.error("Please login to save.");
 
     setIsSaving(true);
     try {
-      // We extract a clean title from the text or use a default
+      
       const cleanTitle = text.split('\n')[0].substring(0, 60) || "Untitled Research";
 
       const payload = {
         title: cleanTitle,
         userEmail: userEmail,
         userNote: "AI Generated Abstract",
-        aiSummary: summary,    // ✅ Field name matches your MongoDB model
+        aiSummary: summary,    
         trendLevel: "Research",
         feasibility: 100,
         doi: "N/A",

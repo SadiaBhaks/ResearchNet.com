@@ -1,5 +1,5 @@
-import dbConnect from "@/lib/dbConnects"; // Changed from dbConnects to dbConnect
-import Topic from "@/models/topic"; // Ensure the Case matches your filename
+import dbConnect from "@/lib/dbConnects"; 
+import Topic from "@/models/topic"; 
 import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { title, userEmail, doi } = body;
 
-    // 1. Basic Validation
+   
     if (!title || !userEmail) {
       console.log("❌ Validation Failed: Missing title or email");
       return NextResponse.json(
@@ -21,8 +21,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Prevent Duplicates (Optional but recommended)
-    // Check if this user already saved this specific DOI
+
     if (doi) {
       const existing = await Topic.findOne({ userEmail, doi });
       if (existing) {
@@ -34,7 +33,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 3. Create the document with user notes
+
     console.log("📦 Attempting to save data:", body);
     const newTopic = await Topic.create(body);
     
@@ -58,7 +57,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Added a GET method so you can fetch the notes later
+
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();

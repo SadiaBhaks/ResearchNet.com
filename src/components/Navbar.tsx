@@ -9,22 +9,21 @@ import { LogOut } from "lucide-react";
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // ✅ Unified Logout Logic
+
   const handleLogout = async () => {
     try {
-      // 1. Clear "Normal" registration data from localStorage
+     
       localStorage.removeItem("nexusUser");
 
-      // 2. Clear NextAuth session
-      // { redirect: false } allows us to handle the final step manually if needed
+      
       const data = await signOut({ redirect: false, callbackUrl: "/" });
 
-      // 3. Force a redirect and page refresh to clear all states
+    
       window.location.href = data.url || "/";
       
     } catch (error) {
       console.error("Logout error:", error);
-      // Fallback: Clear everything and force redirect if API fails
+      
       localStorage.clear();
       window.location.href = "/";
     }
@@ -45,7 +44,7 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Sidebar Overlay */}
+      
       {sidebarOpen && (
         <div 
           onClick={() => setSidebarOpen(false)}
@@ -95,7 +94,6 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* ✅ Updated Logout Button Section */}
         <div className="p-4 border-t border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900">
           <button
             onClick={handleLogout}

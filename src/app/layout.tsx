@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/icon.svg?v=1", // Make sure you saved the SVG I gave you as 'icon.svg' in /public or /app
+        url: "/icon.svg?v=1", 
         href: "/icon.svg?v=1",
       },
     ],
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/*  Wrap everything in AuthProvider */}
+       
         <AuthProvider>
           <DarkModeProvider>
             <Navbar />

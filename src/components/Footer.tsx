@@ -15,7 +15,7 @@ export default function Footer() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
           
-          {/* Brand & Mission */}
+          {/*  name of the Brand & Mission */}
           <div className="col-span-1">
             <div className="text-2xl font-black tracking-tighter mb-5 text-white">
               Research<span className={` ${darkMode ? 'text-purple-400' : 'text-blue-500'}`}>Net</span>
@@ -67,7 +67,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Operational Status Badge */}
+       
           <div className={`flex items-center gap-3 px-4 py-2 rounded-full border shadow-inner ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-slate-50 border-slate-100'}`}>
             <div className="relative flex items-center justify-center">
               <span className="absolute h-2 w-2 rounded-full bg-green-500 animate-ping opacity-75" />

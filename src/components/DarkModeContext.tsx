@@ -15,7 +15,7 @@ const DarkModeContext = createContext<DarkModeContextType>({
 export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
   const [darkMode, setDarkMode] = useState(false);
 
-  // ✅ Safe initialization
+  //  Safe initialization
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -30,7 +30,7 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
     }, 0);
   }, []);
 
-  // Apply/remove dark class whenever darkMode changes
+  
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (darkMode) document.documentElement.classList.add("dark");
@@ -47,5 +47,5 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook to use anywhere
+
 export const useDarkMode = () => useContext(DarkModeContext);

@@ -106,17 +106,17 @@ export default function ComparePage() {
 
         </form>
 
-        {/* Comparison Result UI */}
+        
         {dataA && dataB && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             
-            {/* Analysis Summary Card - Full Width */}
+            
             <div className="lg:col-span-2 p-6 rounded-3xl border-2 "  style={{
                     backgroundColor: card.backgroundColor,
                     border: card.border,
                     backdropFilter: card.backdropFilter,
                     borderRadius: card.borderRadius,
-                    padding: "2rem", // Increased padding for a bigger, cleaner look
+                    padding: "2rem", 
                     boxShadow: card.shadow,
                     color: darkMode ? textColor.dark : textColor.light,
                   }}>

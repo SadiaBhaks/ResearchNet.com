@@ -26,13 +26,12 @@ export default function RegisterPage() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ NEW: Sync with your localStorage system so the app sees them as "logged in"
+        
         localStorage.setItem("nexusUser", JSON.stringify({
           name: formData.name,
           email: formData.email
         }));
 
-        // Redirect to dashboard instead of login for a smoother experience
         router.push("/");
         router.refresh(); 
       } else {

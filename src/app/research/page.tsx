@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, FormEvent } from 'react'; 
 import ResearchCard from '@/components/ResearchCard';
 import { useDarkMode } from "@/components/DarkModeContext";
 import Link from 'next/link';
@@ -10,26 +10,41 @@ import {
   GitCompare, 
   Bookmark,
   Search,
-  Sparkles
+  Sparkles,
+  Filter,
+  X,
+  ChevronRight
 } from "lucide-react";
 
-import { primaryGradient, secondaryColor, textColor, cardBg } from "@/theme/theme";
+import { primaryGradient, textColor } from "@/theme/theme";
+
+interface Paper {
+  id: string;
+  title: string;
+  authors?: string[];
+  year?: number;
+  url?: string;
+}
 
 export default function Research() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Paper[]>([]);
   const [loading, setLoading] = useState(false);
+  const [narrowing, setNarrowing] = useState(false);
+  const [refinedTopics, setRefinedTopics] = useState<string[]>([]);
   const { darkMode } = useDarkMode();
 
-  const handleSearch = async (e: any) => {
-    e.preventDefault();
-    if (!query.trim()) return; // Don't search if empty
-    
+  const handleSearch = async (e?: FormEvent, customQuery?: string) => {
+    if (e) e.preventDefault();
+    const searchQuery = customQuery || query;
+    if (!searchQuery.trim()) return; 
+
     setLoading(true);
     try {
-      const res = await fetch(`/api/research?query=${query}`);
+      const res = await fetch(`/api/research?query=${encodeURIComponent(searchQuery)}`);
       const data = await res.json();
       setResults(data.results || []);
+      if (!customQuery) setRefinedTopics([]); 
     } catch (error) {
       console.error("Search failed:", error);
     } finally {
@@ -37,75 +52,72 @@ export default function Research() {
     }
   };
 
+  const handleNarrowDown = async () => {
+    if (!query.trim()) return;
+    setNarrowing(true);
+    try {
+      const res = await fetch(`/api/research/narrow`, {
+        method: 'POST',
+        body: JSON.stringify({ query }),
+      });
+      const data = await res.json();
+      setRefinedTopics(data.refinedTopics || []);
+    } catch (error) {
+      console.error("Narrow down failed:", error);
+    } finally {
+      setNarrowing(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen">
+      {/*  SIDEBAR  */}
       <aside className={`w-64 border-r p-6 hidden md:flex flex-col gap-8 transition-colors sticky top-0 h-screen ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-gray-100'}`}>
-         
         <div className="flex items-center gap-2 px-2">
-          {/* Changed bg-[#00a388] to bg-sky-500 */}
-         <Image 
-
-    src="/icon.svg" 
-
-    alt="Logo" 
-
-    width={40} 
-
-    height={40} 
-
-    className="rounded-lg shadow-lg shadow-sky-500/20"
-
-  />
+          <Image 
+            src="/icon.svg" 
+            alt="Logo" 
+            width={40} 
+            height={40} 
+            className="rounded-lg shadow-lg shadow-sky-500/20"
+          />
           <span className={`text-xl font-bold tracking-tighter ${darkMode ? 'text-white' : 'text-slate-900'}`}>ResearchNet</span>
         </div>
 
         <nav className="flex flex-col gap-1">
-          <Link href="/research" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
+          <Link href="/research" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white bg-white/5' : 'hover:bg-slate-100 text-slate-600 bg-slate-50'}`}>
             <LayoutDashboard size={18}/> Discover Hub
           </Link>
-          
-          {/* Section Link: Changed href to #trending-section */}
           <Link href="/trending-section" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
             <TrendingUp size={18}/> Trending Topics 
           </Link>
-          
           <Link href="/compare" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
             <GitCompare size={18}/> Compare
           </Link>
-          
           <Link href="/library" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
             <Bookmark size={18}/> Saved Topics
           </Link>
-           <Link href="/summarize" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
+          <Link href="/summarize" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
             <Sparkles size={18}/> Summarize
           </Link>
         </nav>
       </aside>
+    
 
-      {/* --- MAIN CONTENT --- */}
       <main className="flex-1 min-h-screen p-8 transition-colors duration-300"
         style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}
       >
-        <div className="max-w-6xl mx-auto text-center mt-10 mb-16">
+        <div className="max-w-6xl mx-auto text-center mt-10 mb-8">
           <h1 className="text-7xl font-black mb-6 tracking-tighter"
             style={{ color: darkMode ? textColor.dark : textColor.light }}>
             Discover Research
           </h1>
           
-          <p className="mb-10 text-sm font-bold opacity-40 uppercase tracking-widest" 
-             style={{ color: darkMode ? textColor.dark : textColor.light }}>
-            AI-Powered Academic Insights
-          </p>
-
-          <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative group">
-            <div className={`flex items-center p-2 rounded-2xl shadow-2xl transition-all duration-500 border-2 ${
-              darkMode 
-                ? 'bg-black/40 border-white/10 focus-within:border-gray-500/50' 
-                : 'bg-white border-transparent focus-within:border-gray-500/20'
+          <form onSubmit={handleSearch} className="max-w-3xl mx-auto relative group">
+            <div className={`flex items-center p-2 rounded-2xl shadow-2xl border-2 transition-all ${
+              darkMode ? 'bg-black/40 border-white/10 focus-within:border-gray-500/50' : 'bg-white border-transparent focus-within:border-gray-500/20'
             }`}>
-              
               <Search className="ml-4 opacity-30" size={20} style={{ color: darkMode ? textColor.dark : textColor.light }} />
-              
               <input
                 className="flex-1 bg-transparent p-4 outline-none text-lg font-medium"
                 style={{ color: darkMode ? textColor.dark : textColor.light }}
@@ -114,31 +126,54 @@ export default function Research() {
                 onChange={(e) => setQuery(e.target.value)}
               />
 
-              <button
-                disabled={loading}
-                className="bg-gray-700 hover:bg-gray-900 disabled:bg-gray-800 text-white px-10 py-4 rounded-xl font-black uppercase text-xs tracking-widest transition-all active:scale-95 shadow-xl shadow-gray-500/40 flex items-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                    <span>Searching</span>
-                  </>
-                ) : (
-                  "Explore"
-                )}
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={handleNarrowDown}
+                  disabled={narrowing || loading}
+                  className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-4 rounded-xl transition-all active:scale-95 flex items-center gap-2"
+                >
+                  {narrowing ? <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : <Filter size={20} />}
+                  <span className="hidden md:inline font-bold text-xs uppercase tracking-widest">Narrow</span>
+                </button>
+
+                <button type="submit" disabled={loading} className="bg-gray-700 hover:bg-gray-900 text-white px-8 py-4 rounded-xl font-black uppercase text-xs tracking-widest transition-all">
+                  {loading ? "..." : "Explore"}
+                </button>
+              </div>
             </div>
           </form>
+
+          {/* AI Filter Chips */}
+          {refinedTopics.length > 0 && (
+            <div className="mt-8 flex flex-wrap justify-center gap-3 animate-in fade-in slide-in-from-top-4">
+               <span className="w-full text-xs font-bold uppercase opacity-50 mb-1 flex items-center justify-center gap-2">
+                 <Sparkles size={14} /> Refine your focus:
+               </span>
+               {refinedTopics.map((topic, index) => (
+                 <button
+                   key={index}
+                   onClick={() => {
+                     setQuery(topic);
+                     handleSearch(undefined, topic);
+                   }}
+                   className={`flex items-center gap-2 px-5 py-2.5 rounded-full border text-sm font-bold transition-all hover:scale-105 active:scale-95 ${
+                     darkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-white border-slate-200 text-slate-700 hover:shadow-lg'
+                   }`}
+                 >
+                   {topic} <ChevronRight size={14} className="opacity-40" />
+                 </button>
+               ))}
+               <button onClick={() => setRefinedTopics([])} className="p-2 opacity-40 hover:opacity-100 transition-opacity"><X size={18}/></button>
+            </div>
+          )}
         </div>
 
-        {/* Results Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {results.map((paper: any) => (
+          {results.map((paper) => (
             <ResearchCard key={paper.id} paper={paper} />
           ))}
         </div>
-        
-      
       </main>
     </div>
   );

@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Text is too short to summarize." }, { status: 400 });
     }
 
-    // Limit the text length to avoid hitting the "Token Limit" on the first try
+    
     const safeText = text.substring(0, 12000); 
 
     const prompt = `
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error("Gemini Error Detail:", error);
 
-    // If Google says "Slow down", we tell the user nicely instead of crashing
+    
     if (error.message?.includes("429") || error.status === 429) {
       return NextResponse.json({ 
         success: false, 

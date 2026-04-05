@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     await dbConnect();
     const { email, paperData, noteContent } = await request.json();
 
-    // Find the user and push the new note into their savedNotes array
+   
     const updatedUser = await User.findOneAndUpdate(
       { email: email }, 
       { 
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
           } 
         } 
       },
-      { new: true, upsert: true } // Creates user if they don't exist yet
+      { new: true, upsert: true } 
     );
 
     return NextResponse.json({ message: "Note saved!", user: updatedUser });

@@ -128,12 +128,12 @@ export default function ResearchCard({ paper, user }: { paper: any; user?: any }
         border: card.border,
         backdropFilter: card.backdropFilter,
         borderRadius: card.borderRadius,
-        padding: "2rem", // Increased padding for a bigger, cleaner look
+        padding: "2rem", 
         boxShadow: card.shadow,
         color: darkMode ? textColor.dark : textColor.light,
       }}>
       
-      {/* CITATIONS ADDED HERE */}
+   
       <div className="flex justify-between items-start">
         <div className="flex flex-col">
           <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Citations</span>

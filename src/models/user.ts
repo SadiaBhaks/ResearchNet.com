@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
  
   password: { type: String, required: true },
-  // This is where we will store the research papers they save
+ 
   savedNotes: [{
     paperId: String,
     title: String,
@@ -14,5 +14,4 @@ const UserSchema = new mongoose.Schema({
   }]
 }, { timestamps: true });
 
-// This prevents creating the model multiple times during Next.js hot reloads
 export default mongoose.models.User || mongoose.model('User', UserSchema);

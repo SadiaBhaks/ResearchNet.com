@@ -13,7 +13,7 @@ export default function SettingsPage() {
   const { darkMode, toggleDarkMode } = useDarkMode(); 
   const { data: session, status } = useSession();
 
-  // 1. Get custom user from localStorage (Lazy Initialization)
+ 
   const [localUser, setLocalUser] = useState<any>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("nexusUser");
@@ -22,14 +22,14 @@ export default function SettingsPage() {
     return null;
   });
 
-  // ✅ 2. Derived User: Priority to Session, then Local
+  
   const activeUser = useMemo(() => session?.user || localUser, [session, localUser]);
 
-  // 3. State for the input field
+ 
   const [name, setName] = useState(activeUser?.name || "");
   const [isSaving, setIsSaving] = useState(false);
 
-  // ✅ 4. Sync name ONLY if it's currently empty (prevents cascading render error)
+ 
   useEffect(() => {
     if (activeUser?.name && !name) {
       setName(activeUser.name);
@@ -39,7 +39,7 @@ export default function SettingsPage() {
   const isChecking = status === "loading";
 
   useEffect(() => {
-    // Redirect if both auth methods are empty and we're not loading
+  
     if (status === "unauthenticated" && !localUser) {
       router.push("/login");
     }
@@ -59,7 +59,7 @@ export default function SettingsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Update failed");
 
-      // Update local storage if this is a custom email user
+     
       if (localUser) {
         const updated = { ...localUser, name };
         localStorage.setItem("nexusUser", JSON.stringify(updated));
@@ -105,7 +105,7 @@ export default function SettingsPage() {
     <div className="w-full mx-auto p-8 space-y-8"  style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}>
       <Toaster position="top-center" /> 
 
-      {/* --- APPEARANCE SECTION --- */}
+      {/*  APPEARANCE SECTION  */}
       <section className="p-8 rounded-3xl border max-w-5xl mx-auto"   style={{ color: darkMode ? secondaryColor.dark : secondaryColor.light }}>
         <div className="flex items-center gap-3 mb-8 "  style={{ color: darkMode ? secondaryColor.dark : secondaryColor.light }}>
           {darkMode ? <Moon size={24} /> : <Sun size={24} />}
@@ -126,7 +126,7 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      {/* --- PROFILE SECTION --- */}
+      {/*  PROFILE SECTION  */}
       <section className={`p-8 rounded-3xl border max-w-7xl mx-auto ${darkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-100'}`}>
         <div className="flex items-center gap-3 mb-8 "  style={{ color: darkMode ? secondaryColor.dark : secondaryColor.light }}>
           <User size={24} />
@@ -164,7 +164,7 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      {/* --- DANGER ZONE --- */}
+    
       <section className={`p-8 rounded-3xl border border-red-500/20 ${darkMode ? 'bg-red-500/5' : 'bg-red-50'}`}>
         <div className="flex items-center justify-between">
           <div>
