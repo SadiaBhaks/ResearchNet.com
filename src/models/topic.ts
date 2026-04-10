@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const TopicSchema = new mongoose.Schema({
-  // Paper Metadata
+  
   title: { 
     type: String, 
     required: true 
@@ -23,7 +23,7 @@ const TopicSchema = new mongoose.Schema({
   tags: [String],
   aiSummary: { type: String },
 
-  // Nexus Logic (Calculated in your card)
+ 
   trendLevel: { 
     type: String, 
     default: 'Steady Interest' 
@@ -34,24 +34,23 @@ const TopicSchema = new mongoose.Schema({
     max: 100 
   },
 
-  // USER DATA (Crucial for "My Library")
+ 
   userEmail: { 
     type: String, 
     required: true,
-    index: true // Makes searching for a user's notes 10x faster
+    index: true 
   },
   userNote: { 
     type: String, 
     maxlength: 2000 
   },
   
-  // Internal tracking
   isSaved: { 
     type: Boolean, 
     default: true 
   }
 }, { 
-  timestamps: true // Automatically adds 'createdAt' and 'updatedAt'
+  timestamps: true 
 });
 
 export default mongoose.models.Topic || mongoose.model('Topic', TopicSchema);

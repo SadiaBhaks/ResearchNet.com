@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast"; // ✅ Added
+import toast, { Toaster } from "react-hot-toast"; 
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -15,7 +15,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    // ✅ Using toast.promise for integrated feedback
+    
     const loginAction = async () => {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -29,10 +29,10 @@ export default function LoginPage() {
         throw new Error(data.error || "Login failed");
       }
 
-      // Save user to local storage
+      
       localStorage.setItem("nexusUser", JSON.stringify(data.user));
       
-      router.push("/");
+      router.push("/research");
       router.refresh();
       return data;
     };
@@ -51,7 +51,7 @@ export default function LoginPage() {
       },
       success: {
         iconTheme: {
-          primary: '#2563eb', // Blue-600 to match your button
+          primary: '#2563eb', 
           secondary: '#fff',
         },
       },
@@ -62,7 +62,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      {/* --- Added Toaster wrapper --- */}
+      
       <Toaster position="top-center" /> 
 
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">

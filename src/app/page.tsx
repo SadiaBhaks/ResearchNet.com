@@ -15,14 +15,14 @@ import { useSession } from "next-auth/react";
 export default function Homepage() {
  const { darkMode } = useDarkMode();
    const card = darkMode ? cardBg.dark : cardBg.light;
-  const { data: session, status } = useSession(); // ✅ Monitor Google/Github session
+  const { data: session, status } = useSession();
   const router = useRouter();
   
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ NEW: Logic to show popup for Social Login
+  
   const hasShownToast = useRef(false);
   useEffect(() => {
     if (status === "authenticated" && !hasShownToast.current) {
@@ -39,7 +39,7 @@ export default function Homepage() {
     }
   }, [status, session, darkMode]);
 
-  // ✅ KEEPING YOUR ORIGINAL SUBMIT LOGIC EXACTLY THE SAME
+ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -85,7 +85,7 @@ export default function Homepage() {
       },
       success: {
         iconTheme: {
-          primary: '#0ea5e9', // Sky Blue
+          primary: '#0ea5e9',
           secondary: '#fff',
         },
       },
@@ -111,7 +111,7 @@ export default function Homepage() {
   return (
     
     <main className="overflow-hidden">
-      {/* --- Added Toaster wrapper --- */}
+    
       <Toaster position="top-center" />
 
       {/* HERO SECTION */}
@@ -120,7 +120,7 @@ export default function Homepage() {
         className="relative min-h-screen grid grid-cols-1 lg:grid-cols-2"
         style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}
       >
-        {/* glowing gradient background */}
+      
         <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full blur-[160px] opacity-40 bg-blue-500"></div>
         <div className="absolute top-60 right-0 w-[400px] h-[400px] rounded-full blur-[140px] opacity-30 bg-purple-500"></div>
 
@@ -312,7 +312,7 @@ className="flex whitespace-nowrap text-4xl font-black opacity-20 gap-16"
 <span>Graph Theory</span>
 <span>Data Mining</span>
 
-{/* duplicated for infinite effect */}
+
 
 <span>AI</span>
 <span>Machine Learning</span>
@@ -335,14 +335,14 @@ className="flex whitespace-nowrap text-4xl font-black opacity-20 gap-16"
 <section className="relative py-32 px-6 overflow-hidden"
 style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}>
 
-  {/* Floating glowing blobs */}
+  
   <div className="absolute -top-20 -left-20 w-[400px] h-[400px] rounded-full bg-blue-500/20 blur-[150px] animate-floatSlow"></div>
   <div className="absolute bottom-10 right-0 w-[300px] h-[300px] rounded-full bg-purple-500/20 blur-[120px] animate-floatSlow"></div>
 
-  {/* Background gradient */}
+
   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-50/20 to-transparent dark:via-purple-900/10"></div>
 
-  {/* subtle grid pattern */}
+  
   <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#888_1px,transparent_1px)] [background-size:30px_30px]"></div>
 
   <div className="relative max-w-7xl mx-auto">
@@ -379,10 +379,10 @@ darkMode ? 'text-white'  : 'text-gray-600 '
           className="group relative p-10 rounded-3xl backdrop-blur-xl border border-white/20 bg-white/30 dark:bg-white/5 shadow-2xl overflow-hidden cursor-pointer transition-all"
         >
 
-          {/* hover glow */}
+       
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-gradient-to-r from-blue-500/10 to-purple-500/10 blur-xl"></div>
 
-          {/* icon with subtle float */}
+       
           <motion.div
             animate={{y:[0,-5,0]}}
             transition={{repeat:Infinity, duration:3 + i}}
@@ -411,13 +411,13 @@ darkMode ? 'text-white'  : 'text-gray-600 '
 
 <section className="relative py-36 overflow-hidden"style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}>
 
-  {/* Background glow */}
+ 
   <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-blue-500/20 blur-[180px] opacity-40"></div>
   <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-purple-500/20 blur-[160px] opacity-30"></div>
 
   <div className="relative max-w-6xl mx-auto px-6">
 
-    {/* Heading */}
+    
     <motion.h2
       initial={{opacity:0,y:40}}
       whileInView={{opacity:1,y:0}}
@@ -456,7 +456,7 @@ darkMode ? 'text-white'  : 'text-gray-600 '
           className="group relative p-12 rounded-3xl backdrop-blur-xl bg-white/40 dark:bg-white/5 border border-white/20 shadow-xl overflow-hidden text-center"
         >
 
-          {/* Hover glow */}
+       
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-r from-blue-500/10 to-purple-500/10"></div>
 
           <h2 className="text-4xl font-black bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent relative z-10">
@@ -488,7 +488,6 @@ darkMode ? 'text-white'  : 'text-gray-600 '
 
 <section className="relative py-40 text-center overflow-hidden" style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}>
 
-{/* glowing background */}
 
 <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-blue-500/20 blur-[180px] opacity-40"></div>
   <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-purple-500/20 blur-[160px] opacity-30"></div>
@@ -518,7 +517,7 @@ whileTap={{scale:0.95}}
           border: card.border,
           backdropFilter: card.backdropFilter,
           borderRadius: card.borderRadius,
-          padding: "2rem", // Increased padding for a bigger, cleaner look
+          padding: "2rem", 
           boxShadow: card.shadow,
           color: darkMode ? textColor.dark : textColor.light,
         }}
@@ -526,7 +525,7 @@ whileTap={{scale:0.95}}
   Explore Research{" "}
   <motion.span
     className="ml-3 text-4xl"
-    animate={{ x: [0, 6, 0] }} // moves 6px right and back
+    animate={{ x: [0, 6, 0] }} 
     transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
   >
     →

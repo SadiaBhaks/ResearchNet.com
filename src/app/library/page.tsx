@@ -11,7 +11,7 @@ interface SavedTopic {
   _id: string;
   title: string;
   userNote: string;
-  aiSummary?: string; // ✅ Field matches your POST request
+  aiSummary?: string; 
   trendLevel: string;
   feasibility: number;
   doi: string;
@@ -27,7 +27,7 @@ export default function LibraryPage() {
 
   const router = useRouter();
 
-  // ✅ 1. Get user email correctly
+  
   useEffect(() => {
     const savedUser = localStorage.getItem("nexusUser");
 
@@ -40,7 +40,7 @@ export default function LibraryPage() {
     setUserEmail(parsed.email);
   }, [router]);
 
-  // ✅ 2. Fetch notes using the 'email' query param (which matches your GET route)
+  
   useEffect(() => {
     if (!userEmail) return;
 
@@ -158,7 +158,7 @@ export default function LibraryPage() {
                       </p>
                     </div>
 
-                    {/* ✅ AI Summary Section */}
+                    {/*  AI Summary Section */}
                     {note.aiSummary && (
                       <div className={`p-4 rounded-2xl border ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
                         <div className="flex items-center gap-2 mb-2">
@@ -174,7 +174,7 @@ export default function LibraryPage() {
                     )}
                   </div>
 
-                  {/* Feasibility Bar */}
+                
                   <div className="mt-8 pt-6 border-t border-white/10 dark:border-white/20">
                     <div className={`flex justify-between items-center text-[10px] font-bold uppercase mb-2 ${darkMode ? 'text-gray-400' : 'text-slate-400'}`}>
                       <span>Feasibility Check</span>

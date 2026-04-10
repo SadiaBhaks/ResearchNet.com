@@ -105,6 +105,10 @@ export default function SummarizerPage() {
     return null;
   };
 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 5f6ad77d58b67540910897f018a993f3ecee134c
   const handleSummarize = async () => {
     if (!text || text.length < 50) return toast.error("Paste more content for a better summary!");
     setIsSummarizing(true);
@@ -129,11 +133,16 @@ export default function SummarizerPage() {
     }
   };
 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 5f6ad77d58b67540910897f018a993f3ecee134c
   const handleSaveToLibrary = async () => {
     const userEmail = getActiveEmail();
     if (!summary || !userEmail) return toast.error("Sign in to build your library.");
     setIsSaving(true);
     try {
+<<<<<<< HEAD
       const firstLine = text.split('\n')[0].substring(0, 60).trim();
       const payload = {
         title: firstLine || "Research Note",
@@ -141,6 +150,17 @@ export default function SummarizerPage() {
         userNote: "Summarized via Topic Nexus AI",
         aiSummary: summary,
         trendLevel: "High",
+=======
+      
+      const cleanTitle = text.split('\n')[0].substring(0, 60) || "Untitled Research";
+
+      const payload = {
+        title: cleanTitle,
+        userEmail: userEmail,
+        userNote: "AI Generated Abstract",
+        aiSummary: summary,    
+        trendLevel: "Research",
+>>>>>>> 5f6ad77d58b67540910897f018a993f3ecee134c
         feasibility: 100,
         doi: "N/A",
         tags: ["AI", "Paper-Analysis"]

@@ -49,7 +49,7 @@ export default function TrendingTopics() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
         {topics.map((topic) => {
-          // Calculate Citation Impact Ratio (Citations per Work)
+          
           const citationsPerWork = (topic.cited_by_count / topic.works_count).toFixed(1);
           
           return (
@@ -78,7 +78,7 @@ export default function TrendingTopics() {
                 </p>
               </div>
 
-              {/* CITATIONS SECTION (Replacing Feasibility) */}
+              
               <div className={`flex items-center gap-4 p-3 rounded-xl ${darkMode ? 'bg-white/5' : 'bg-slate-50'}`}>
                
                 <div className="flex flex-col">
