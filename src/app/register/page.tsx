@@ -32,7 +32,7 @@ export default function RegisterPage() {
           email: formData.email
         }));
 
-        router.push("/");
+        router.push("/login");
         router.refresh(); 
       } else {
         setError(data.error || "Registration failed");

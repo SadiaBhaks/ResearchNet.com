@@ -67,7 +67,7 @@ export default function Homepage() {
       );
 
       router.refresh();
-      router.push("/");
+      router.push("/login");
       return data;
     };
 
@@ -289,8 +289,6 @@ darkMode ? "bg-purple-600 hover:bg-purple-700" : "bg-blue-600 hover:bg-blue-700"
           </motion.div>
         </div>
       </section>
-
-
 {/* MOVING KEYWORD TICKER */}
 
 <section className="py-20 overflow-hidden">
