@@ -18,15 +18,16 @@ export default function SummarizerPage() {
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isExtracting, setIsExtracting] = useState(false);
-
+  
+  // State to hold the dynamically loaded PDF library
   const [pdfLib, setPdfLib] = useState<any>(null);
 
- 
+  // --- EFFECT: Load PDF.js only on the Client ---
   useEffect(() => {
     const loadPdfJS = async () => {
       try {
         const pdfjs = await import("pdfjs-dist");
-        
+        // Use a reliable CDN for the worker that matches the library version
         pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
         setPdfLib(pdfjs);
       } catch (err) {
@@ -36,6 +37,7 @@ export default function SummarizerPage() {
     loadPdfJS();
   }, []);
 
+  // --- PDF Extraction Logic ---
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -51,13 +53,13 @@ export default function SummarizerPage() {
       const pdf = await loadingTask.promise;
       
       let fullText = "";
-    
+      // Limit to 10 pages to stay within Gemini token/free-tier limits
       const pageLimit = Math.min(pdf.numPages, 10);
       
       for (let i = 1; i <= pageLimit; i++) {
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
-       
+        // Use any to avoid complex PDF text item types
         const strings = content.items.map((item: any) => item.str);
         fullText += strings.join(" ") + "\n";
       }
