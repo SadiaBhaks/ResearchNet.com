@@ -6,6 +6,7 @@ import { Sparkles, Copy, Loader2, RefreshCw, BookOpen, FileText, Upload, Trash2 
 import toast, { Toaster } from "react-hot-toast";
 import { primaryGradient, secondaryColor, textColor } from "@/theme/theme";
 import { useDarkMode } from "@/components/DarkModeContext";
+import Link from "next/link";
 
 export default function SummarizerPage() {
   const { darkMode } = useDarkMode();
@@ -19,15 +20,13 @@ export default function SummarizerPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isExtracting, setIsExtracting] = useState(false);
   
-  // State to hold the dynamically loaded PDF library
   const [pdfLib, setPdfLib] = useState<any>(null);
 
-  // --- EFFECT: Load PDF.js only on the Client ---
   useEffect(() => {
     const loadPdfJS = async () => {
       try {
         const pdfjs = await import("pdfjs-dist");
-        // Use a reliable CDN for the worker that matches the library version
+      
         pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
         setPdfLib(pdfjs);
       } catch (err) {
@@ -37,7 +36,7 @@ export default function SummarizerPage() {
     loadPdfJS();
   }, []);
 
-  // --- PDF Extraction Logic ---
+ 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -53,13 +52,13 @@ export default function SummarizerPage() {
       const pdf = await loadingTask.promise;
       
       let fullText = "";
-      // Limit to 10 pages to stay within Gemini token/free-tier limits
+      
       const pageLimit = Math.min(pdf.numPages, 10);
       
       for (let i = 1; i <= pageLimit; i++) {
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
-        // Use any to avoid complex PDF text item types
+  
         const strings = content.items.map((item: any) => item.str);
         fullText += strings.join(" ") + "\n";
       }
@@ -111,29 +110,38 @@ export default function SummarizerPage() {
     const userEmail = getActiveEmail();
     if (!summary || !userEmail) return toast.error("Sign in to build your library.");
     setIsSaving(true);
+
     try {
-      const firstLine = text.split('\n')[0].substring(0, 60).trim();
+      
+      const baseTitle = text.split('\n')[0].substring(0, 50).trim() || "Research Note";
+      
+      const uniqueTitle = `${baseTitle} (Summary - ${new Date().toLocaleDateString()})`;
+
       const payload = {
-        title: firstLine || "Research Note",
+        title: uniqueTitle,
         userEmail,
-        userNote: "Summarized via Topic Nexus AI",
+        userNote: "AI-Generated Summary",
         aiSummary: summary,
         trendLevel: "High",
         feasibility: 100,
         doi: "N/A",
-        tags: ["AI", "Paper-Analysis"]
+        tags: ["AI", "Summarized"]
       };
+
       const res = await fetch("/api/topics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+
       const data = await res.json();
+
       if (data.success) {
-        toast.success("Added to Library! 📚");
-        router.push("/library");
+        toast.success("Summary added to Library! 📚");
+        
       } else {
-        throw new Error(data.error);
+        
+        throw new Error(data.error || "Database rejected the save.");
       }
     } catch (err: any) {
       toast.error(err.message);
@@ -144,9 +152,16 @@ export default function SummarizerPage() {
 
   return (
     <div className="w-full p-6 space-y-8 min-h-screen transition-colors duration-500" style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}>
+      
       <Toaster position="top-center" />
       
       <div className="flex flex-col gap-2">
+         <Link
+                     href="/research"
+                     className="text-blue-600 text-sm font-bold flex items-center gap-2 mb-4 ml-4 hover:underline"
+                   >
+                     ← Back to Discover Hub
+                   </Link>
         <h1 className="text-4xl font-black italic tracking-tighter flex items-center gap-3" style={{ color: darkMode ? secondaryColor.dark : secondaryColor.light }}>
           <Sparkles size={32} className="animate-pulse" /> PAPER SUMMARIZER
         </h1>
