@@ -16,20 +16,20 @@ export default function LoginPage() {
     setLoading(true);
 
     const loginAction = async () => {
-      // 1. Trigger the credentials sign-in
+      
       const res = await signIn("credentials", {
-        redirect: false, // We handle redirection manually
+        redirect: false, 
         email: formData.email,
         password: formData.password,
       });
 
-      // 2. Check for errors in the res object
+      
       if (res?.error) {
         throw new Error("Invalid email or password");
       }
 
       if (res?.ok) {
-        // 3. Force a hard push and refresh to sync the session state
+       
         router.push("/research");
         router.refresh(); 
       }

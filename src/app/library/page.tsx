@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDarkMode } from "@/components/DarkModeContext";
 import { Sparkles, ArrowLeft } from "lucide-react";
-import { primaryGradient, secondaryColor, textColor, cardBg } from "@/theme/theme"; 
+import { primaryGradient, secondaryColor, textColor } from "@/theme/theme"; 
+import { useSession } from "next-auth/react";
 
 interface SavedTopic {
   _id: string;
   title: string;
   userNote: string;
-  aiSummary?: string; 
+  aiSummary?: string;
   trendLevel: string;
   feasibility: number;
   doi: string;
@@ -21,32 +22,27 @@ interface SavedTopic {
 
 export default function LibraryPage() {
   const [notes, setNotes] = useState<SavedTopic[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const { data: session, status } = useSession(); 
   const { darkMode } = useDarkMode();
-
   const router = useRouter();
 
-  
+  // 1. Protection: Redirect if not authenticated
   useEffect(() => {
-    const savedUser = localStorage.getItem("nexusUser");
-
-    if (!savedUser) {
+    if (status === "unauthenticated") {
       router.push("/login");
-      return;
     }
+  }, [status, router]);
 
-    const parsed = JSON.parse(savedUser);
-    setUserEmail(parsed.email);
-  }, [router]);
-
-  
+  // 2. Fetch Notes based on the session email
   useEffect(() => {
-    if (!userEmail) return;
+    // This guard ensures session.user.email is definitely a string below
+    if (status !== "authenticated" || !session?.user?.email) return;
 
     async function fetchNotes() {
       try {
-        const res = await fetch(`/api/topics?email=${userEmail}`);
+        // TypeScript now knows session.user.email exists
+        const email = session?.user?.email;
+        const res = await fetch(`/api/topics?email=${email}`);
         const json = await res.json();
 
         if (json.success) {
@@ -54,17 +50,16 @@ export default function LibraryPage() {
         }
       } catch (err) {
         console.error("Failed to load library:", err);
-      } finally {
-        setLoading(false);
       }
     }
 
     fetchNotes();
-  }, [userEmail]);
+  }, [status, session]);
 
-  if (loading) {
+  // 3. Loading State
+  if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center ">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 dark:border-blue-400"></div>
       </div>
     );
