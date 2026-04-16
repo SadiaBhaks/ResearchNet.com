@@ -13,6 +13,7 @@ import {
   Sparkles,
   Filter,
   X,
+  BarChart3,
   ChevronRight
 } from "lucide-react";
 
@@ -71,7 +72,7 @@ export default function Research() {
 
   return (
     <div className="flex min-h-screen">
-      {/*  SIDEBAR  */}
+      
       <aside className={`w-64 border-r p-6 hidden md:flex flex-col gap-8 transition-colors sticky top-0 h-screen ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-gray-100'}`}>
         <div className="flex items-center gap-2 px-2">
           <Image 
@@ -99,6 +100,9 @@ export default function Research() {
           </Link>
           <Link href="/summarize" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
             <Sparkles size={18}/> Summarize
+          </Link>
+          <Link href="/analysis" className={`flex items-center gap-3 p-2.5 rounded-xl transition-all font-semibold ${darkMode ? 'hover:bg-white/5 text-white' : 'hover:bg-slate-100 text-slate-600'}`}>
+             <BarChart3 size={18} /> Citation Analysis
           </Link>
         </nav>
       </aside>

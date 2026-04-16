@@ -162,7 +162,7 @@ export default function SummarizerPage() {
                    >
                      ← Back to Discover Hub
                    </Link>
-        <h1 className="text-4xl font-black italic tracking-tighter flex items-center gap-3" style={{ color: darkMode ? secondaryColor.dark : secondaryColor.light }}>
+        <h1 className="text-4xl font-black  tracking-tighter flex items-center gap-3" style={{ color: darkMode ? secondaryColor.dark : secondaryColor.light }}>
           <Sparkles size={32} className="animate-pulse" /> PAPER SUMMARIZER
         </h1>
         <p className="opacity-60 font-medium" style={{ color: darkMode ? secondaryColor.dark : secondaryColor.light }}>

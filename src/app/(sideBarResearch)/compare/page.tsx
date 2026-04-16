@@ -128,10 +128,10 @@ export default function ComparePage() {
                </p>
             </div>
 
-            {/* Topic A Card */}
+            
             <CompareCard data={dataA} darkMode={darkMode} color="sky" />
             
-            {/* Topic B Card */}
+            
             <CompareCard data={dataB} darkMode={darkMode} color="indigo" />
 
           </div>
@@ -141,7 +141,7 @@ export default function ComparePage() {
   );
 }
 
-// Reusable Sub-Component for the Comparison Cards
+
 function CompareCard({ data, darkMode, color }: { data: any, darkMode: boolean, color: string }) {
   return (
     <div className={`p-8 rounded-3xl border-2 transition-all ${darkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-100'}`}>

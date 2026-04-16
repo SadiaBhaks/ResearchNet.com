@@ -137,7 +137,7 @@ export default function Homepage() {
             className="text-lg max-w-xl leading-relaxed"
             style={{ color: darkMode ? textColor.dark : textColor.light }}
           >
-            Stop just reading papers—start building a **library of insights**.
+            Stop just reading papers—start building a library of insights.
             ResearchNet analyzes citation trends and feasibility in real-time.
             <span className="block mt-6"> <b className="text-xl">Search. Analyze. Annotate.</b> </span>
           </motion.p>

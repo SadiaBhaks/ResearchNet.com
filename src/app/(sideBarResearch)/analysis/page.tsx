@@ -34,7 +34,7 @@ export default function CitationAnalysis() {
     const toastId = toast.loading("Analyzing citations...");
 
     try {
-      // Simulate analysis logic
+      
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       setMetrics({
@@ -45,7 +45,7 @@ export default function CitationAnalysis() {
 
       toast.success("Analysis Complete!", { id: toastId });
     } catch (err: unknown) {
-      // Fix: Safely handle unknown error types
+     
       console.error(err);
       toast.error("Analysis failed. Try again.", { id: toastId });
     } finally {
@@ -68,7 +68,7 @@ export default function CitationAnalysis() {
       </div>
       
       <div className="flex flex-col gap-2 mb-8">
-        <h1 className="text-4xl font-black italic tracking-tighter flex items-center gap-3" 
+        <h1 className="text-4xl font-black  tracking-tighter flex items-center gap-3" 
             style={{ color: darkMode ? secondaryColor.dark : secondaryColor.light }}>
           <BarChart3 size={32} /> CITATION ANALYSIS
         </h1>
