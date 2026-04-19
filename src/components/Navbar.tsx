@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react"; 
 import { LogOut, UserPlus, LogIn, Library, Home, Search, Settings, Sun, Moon } from "lucide-react";
-import { useDarkMode } from "@/components/DarkModeContext"; // Ensure path is correct
+import { useDarkMode } from "@/components/DarkModeContext"; 
 
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -23,17 +23,17 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="flex items-center justify-between p-4 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm border-b border-gray-100 dark:border-zinc-800 sticky top-0 z-40">
+      
+      <nav className="flex items-center justify-between p-4 bg-gray-800  text-white shadow-sm border-b border-zinc-800 sticky top-0 z-40">
         <div className="text-xl font-black italic tracking-tighter text-white">
-          <h1>ResearchNet.com</h1>
+          <h1>Research<span className={` ${darkMode ? 'text-purple-400' : 'text-blue-500'}`}>Net</span>.com</h1>
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Theme Toggle Button */}
+        
           <button
             onClick={toggleDarkMode}
-            className="p-2.5 rounded-xl bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 transition-all border border-gray-200 dark:border-zinc-700 text-yellow-500 dark:text-blue-400"
+            className="p-2.5 rounded-xl bg-gray-800 hover:bg-gray-100 transition-all border border-gray-200 dark:border-zinc-700 text-yellow-500 dark:text-blue-400"
             aria-label="Toggle Theme"
           >
             {darkMode ? <Sun size={20} fill="currentColor" /> : <Moon size={20} fill="currentColor" />}
