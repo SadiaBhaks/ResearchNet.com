@@ -150,7 +150,7 @@ export default function Homepage() {
           />
         </div>
 
-        {/* RIGHT SIDE: CONDITIONAL FORM OR WELCOME CARD */}
+        
         <div className="flex items-center justify-center p-10 relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -159,7 +159,7 @@ export default function Homepage() {
             className="w-full max-w-md"
           >
             {status === "authenticated" ? (
-              /* WELCOME VIEW WHEN LOGGED IN */
+            
               <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl p-10 rounded-3xl shadow-2xl border border-white/20 text-center">
                 <div className="flex justify-center mb-6">
                   <div className="p-4 bg-blue-500/20 rounded-full">
@@ -183,7 +183,7 @@ export default function Homepage() {
                 </button>
               </div>
             ) : (
-              /* REGISTER FORM WHEN LOGGED OUT */
+             
               <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl border border-white/20">
                 <h1 className="text-black dark:text-white text-2xl text-center m-2 font-black">Register Here</h1>
                 <p className="text-sm text-center text-gray-500 dark:text-zinc-400 mb-8">

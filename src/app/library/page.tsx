@@ -26,21 +26,21 @@ export default function LibraryPage() {
   const { darkMode } = useDarkMode();
   const router = useRouter();
 
-  // 1. Protection: Redirect if not authenticated
+ 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
     }
   }, [status, router]);
 
-  // 2. Fetch Notes based on the session email
+  
   useEffect(() => {
-    // This guard ensures session.user.email is definitely a string below
+   
     if (status !== "authenticated" || !session?.user?.email) return;
 
     async function fetchNotes() {
       try {
-        // TypeScript now knows session.user.email exists
+     
         const email = session?.user?.email;
         const res = await fetch(`/api/topics?email=${email}`);
         const json = await res.json();
@@ -56,7 +56,7 @@ export default function LibraryPage() {
     fetchNotes();
   }, [status, session]);
 
-  // 3. Loading State
+ 
   if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">

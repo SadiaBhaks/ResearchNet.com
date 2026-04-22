@@ -3,6 +3,7 @@ import { useState, FormEvent } from 'react';
 import ResearchCard from '@/components/ResearchCard';
 import { useDarkMode } from "@/components/DarkModeContext";
 import Link from 'next/link';
+
 import Image from 'next/image';
 import { 
   LayoutDashboard, 
@@ -17,7 +18,7 @@ import {
   ChevronRight
 } from "lucide-react";
 
-import { primaryGradient, textColor } from "@/theme/theme";
+import { primaryGradient, textColor,secondaryColor } from "@/theme/theme";
 
 interface Paper {
   id: string;
@@ -74,7 +75,8 @@ export default function Research() {
     <div className=" flex min-h-screen  ">
       
       <aside className={`w-64  border-r p-6  md:flex flex-col gap-8 transition-colors sticky top-0 h-screen ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-gray-100'}`}>
-        <div className="flex items-center gap-2 px-2">
+        <div className="flex items-center gap-2 px-2" >
+         
           <Image 
             src="/icon.svg" 
             alt="Logo" 
@@ -138,17 +140,18 @@ export default function Research() {
     
     <div className="flex gap-2 px-2 pb-2 sm:pb-0 sm:px-0">
       <button
-        type="button"
-        onClick={handleNarrowDown}
-        disabled={narrowing || loading}
-        className="flex-1 sm:flex-none bg-sky-600 hover:bg-sky-700 text-white px-4 py-3 sm:py-4 rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2"
-      >
-        {narrowing
-          ? <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-          : <Filter size={18} />}
-        <span className="font-bold text-xs uppercase tracking-widest">Narrow</span>
-      </button>
-
+  type="button"
+  onClick={handleNarrowDown}
+  disabled={narrowing || loading}
+  className={`flex-1 sm:flex-none text-white px-4 py-3 sm:py-4 rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2 
+  ${darkMode ? 'bg-purple-500 border border-zinc-800' : 'bg-blue-500 border border-gray-100'}`}
+>
+  {narrowing
+    ? <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+    : <Filter size={18} />}
+    
+  <span className="font-bold text-xs uppercase tracking-widest">Narrow</span>
+</button>
       <button
         type="submit"
         disabled={loading}
