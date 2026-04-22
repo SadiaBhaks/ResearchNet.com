@@ -10,9 +10,7 @@ import { primaryGradient, secondaryColor } from "@/theme/theme";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
 
-/** * Props Interface for the Metric Card
- * Includes description to help users understand the data
- */
+
 interface MetricCardProps {
   icon: React.ReactNode;
   label: string;
@@ -41,7 +39,7 @@ export default function CitationAnalysis() {
     const toastId = toast.loading("Analyzing citations...");
 
     try {
-      // Simulate API call for citation extraction
+    
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       setMetrics({
@@ -125,7 +123,7 @@ export default function CitationAnalysis() {
           />
         </div>
 
-        {/* Upload Zone */}
+       
         <input 
           type="file" 
           ref={fileInputRef} 
@@ -172,9 +170,7 @@ export default function CitationAnalysis() {
   );
 }
 
-/**
- * MetricCard Sub-component
- */
+
 function MetricCard({ icon, label, value, description, darkMode }: MetricCardProps) {
   return (
     <div className={`p-8 rounded-[2.5rem] border transition-all hover:translate-y-[-4px] group ${

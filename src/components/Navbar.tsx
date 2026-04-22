@@ -24,7 +24,7 @@ export default function Navbar() {
   return (
     <>
       
-      <nav className="flex items-center justify-between p-4 bg-gray-800  text-white shadow-sm border-b border-zinc-800 sticky top-0 z-40">
+      <nav className="flex items-center justify-between p-4 bg-gray-800  text-white shadow-sm border-b border-zinc-800 sticky top-0 z-40 w-full ">
         <div className="text-xl font-black italic tracking-tighter text-white">
           <h1>Research<span className={` ${darkMode ? 'text-purple-400' : 'text-blue-500'}`}>Net</span>.com</h1>
         </div>

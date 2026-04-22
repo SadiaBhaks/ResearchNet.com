@@ -71,9 +71,9 @@ export default function Research() {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className=" flex min-h-screen  ">
       
-      <aside className={`w-64 border-r p-6  md:flex flex-col gap-8 transition-colors sticky top-0 h-screen ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-gray-100'}`}>
+      <aside className={`w-64  border-r p-6  md:flex flex-col gap-8 transition-colors sticky top-0 h-screen ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-gray-100'}`}>
         <div className="flex items-center gap-2 px-2">
           <Image 
             src="/icon.svg" 
@@ -109,23 +109,23 @@ export default function Research() {
       </aside>
     
 
-      <main className="flex-1 min-h-screen p-4 sm:p-8 transition-colors duration-300"
+      <main className="flex-2 min-h-screen pt-4 transition-colors duration-300 "
   style={{ background: darkMode ? primaryGradient.dark : primaryGradient.light }}
 >
-  <div className="max-w-6xl sm:mx-w-4xl mx-auto text-center mt-6 sm:mt-10 mb-8">
-    <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black mb-6 tracking-tighter"
+  <div className="max-w-6xl md:mx-w-4xl mx-auto text-center mt-6 sm:mt-10 mb-8 ">
+    <h1 className="text-3xl md:text-5xl lg:text-7xl font-black mb-6 tracking-tighter"
       style={{ color: darkMode ? textColor.dark : textColor.light }}>
       Discover Research
     </h1>
     
-    <form onSubmit={handleSearch} className="w-full max-w-3xl mx-auto relative group">
+    <form onSubmit={handleSearch} className="w-full md:max-w-3xl  mx-auto relative group">
   <div className={`flex flex-col sm:flex-row items-stretch sm:items-center p-2 rounded-2xl shadow-2xl border-2 transition-all ${
     darkMode ? 'bg-black/40 border-white/10 focus-within:border-gray-500/50' : 'bg-white border-transparent focus-within:border-gray-500/20'
   }`}>
     
     {/* Input row */}
     <div className="flex items-center flex-1">
-      <Search className="ml-4 opacity-30 shrink-0" size={20} style={{ color: darkMode ? textColor.dark : textColor.light }} />
+      <Search className=" opacity-30 shrink-0" size={20} style={{ color: darkMode ? textColor.dark : textColor.light }} />
       <input
         className="flex-1 bg-transparent p-4 outline-none text-base sm:text-lg font-medium min-w-0"
         style={{ color: darkMode ? textColor.dark : textColor.light }}
