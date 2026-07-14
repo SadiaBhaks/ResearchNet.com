@@ -376,10 +376,3 @@ Focused on scalable architectures, backend systems, research-oriented platforms,
 ---
 
 
-# Acknowledgements
-
-* Next.js
-* MongoDB Atlas
-* Vercel
-* NextAuth.js
-* Open-source developer community
