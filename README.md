@@ -6,6 +6,8 @@ A modern research discovery and analytics platform designed to help students, re
 ResearchNet combines intelligent paper discovery, citation analysis, authentication systems, and personalized research management into a scalable full-stack application built with modern web technologies.
 
 ---
+## video Demo
+https://youtu.be/ftiIKEae4e0
 
 ## Live Demo
 
